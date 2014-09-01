@@ -32,8 +32,11 @@ namespace SlidingPanels.Lib
     /// <summary>
     ///     Sliding Panels Main View Controller
     /// </summary>
-    public class SlidingPanelsNavigationViewController : UINavigationController
-    {
+    public class SlidingPanelsNavigationViewController : UINavigationController {
+
+		public event EventHandler WillRotateEvent;
+		public event EventHandler DidRotateEvent;
+
         #region Constants
 
         /// <summary>
@@ -202,6 +205,25 @@ namespace SlidingPanels.Lib
         {
             base.WillRotate(toInterfaceOrientation, duration);
             _panelContainers.ForEach(c => c.WillRotate(toInterfaceOrientation, duration));
+
+
+			if (toInterfaceOrientation == UIInterfaceOrientation.Portrait || toInterfaceOrientation == UIInterfaceOrientation.PortraitUpsideDown) {
+
+				try {
+					PanelContainer container = ExistingContainerForType(PanelType.RightPanel);
+					HidePanel (container);
+				} catch (Exception e) {
+				}
+
+				var frame = View.Frame;
+				var rect = UIApplication.SharedApplication.KeyWindow.Frame;
+				frame.Size = new SizeF (rect.Width, rect.Height);
+				View.Frame = frame;
+			}
+
+			if (WillRotateEvent != null) {
+				WillRotateEvent (this, EventArgs.Empty);
+			}
         }
 
         /// <summary>
@@ -219,6 +241,7 @@ namespace SlidingPanels.Lib
 				if (IsPanelVisible (PanelType.RightPanel) == false) {
 					try {
 						PanelContainer container = ExistingContainerForType(PanelType.RightPanel);
+						HidePanel (container);
 						ShowPanel (container);
 					} catch (Exception e) {
 					}
@@ -228,10 +251,18 @@ namespace SlidingPanels.Lib
 				frame.Size = new SizeF (rect.Width, rect.Height);
 			}
 
+
 			View.Frame = frame;
 
             base.DidRotate(fromInterfaceOrientation);
             _panelContainers.ForEach(c => c.DidRotate(fromInterfaceOrientation));
+
+			Console.WriteLine ("DidRotate: {0} => {1}; {2}", InterfaceOrientation, View.Frame.Width, View.Frame.Height);
+
+			if (DidRotateEvent != null) {
+				DidRotateEvent (this, EventArgs.Empty);
+			}
+
         }
 
         #endregion
