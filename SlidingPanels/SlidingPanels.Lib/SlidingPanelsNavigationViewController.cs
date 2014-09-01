@@ -107,7 +107,7 @@ namespace SlidingPanels.Lib
         {
 			if (UIDevice.CurrentDevice.CheckSystemVersion (6, 0)) 
 			{
-				InteractivePopGestureRecognizer.Enabled = false;
+				//InteractivePopGestureRecognizer.Enabled = false;
 			}
 
 			ShadowColor = UIColor.Black.CGColor;
@@ -308,8 +308,10 @@ namespace SlidingPanels.Lib
                 delegate { View.Frame = container.GetTopViewPositionWhenSliderIsVisible(View.Frame); },
                 delegate
                 {
-                    View.AddGestureRecognizer(_tapToClose);
-                    container.ViewDidAppear(true);
+					if(InterfaceOrientation == UIInterfaceOrientation.Portrait || InterfaceOrientation == UIInterfaceOrientation.PortraitUpsideDown) {
+						View.AddGestureRecognizer(_tapToClose);
+					}
+					container.ViewDidAppear(true);
                 });
         }
 
@@ -325,8 +327,10 @@ namespace SlidingPanels.Lib
                 delegate { View.Frame = container.GetTopViewPositionWhenSliderIsHidden(View.Frame); },
                 delegate
                 {
-                    View.RemoveGestureRecognizer(_tapToClose);
-                    container.Hide();
+					if(InterfaceOrientation == UIInterfaceOrientation.Portrait || InterfaceOrientation == UIInterfaceOrientation.PortraitUpsideDown) {
+	                    View.RemoveGestureRecognizer(_tapToClose);
+    	                container.Hide();
+					}
                     container.ViewDidDisappear(true);
                 });
         }
