@@ -90,10 +90,16 @@ namespace SlidingPanels.Lib
 			_panelContainers = panelContainers;
 
 			this.ShouldReceiveTouch += (sender, touch) => {
+
 				if (SlidingController == null) 
 				{ 
 					return false; 
 				}
+
+				if(SlidingController.InterfaceOrientation == UIInterfaceOrientation.LandscapeLeft || SlidingController.InterfaceOrientation == UIInterfaceOrientation.LandscapeRight) {
+					return false;
+				}
+
 
 				if (touch.View is UIButton) 
 				{ 

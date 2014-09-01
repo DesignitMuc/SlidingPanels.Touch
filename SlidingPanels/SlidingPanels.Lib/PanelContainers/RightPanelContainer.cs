@@ -107,7 +107,7 @@ namespace SlidingPanels.Lib.PanelContainers
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public override RectangleF GetTopViewPositionWhenSliderIsVisible(RectangleF topViewCurrentFrame)
 		{
-			if (UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.Portrait || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.PortraitUpsideDown) {
+			if (InterfaceOrientation == UIInterfaceOrientation.Portrait || InterfaceOrientation == UIInterfaceOrientation.PortraitUpsideDown) {
 				topViewCurrentFrame.X = - Size.Width;
 				return topViewCurrentFrame;
 			} else {

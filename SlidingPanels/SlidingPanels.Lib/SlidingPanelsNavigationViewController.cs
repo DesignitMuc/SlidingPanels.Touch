@@ -211,6 +211,25 @@ namespace SlidingPanels.Lib
         /// <param name="fromInterfaceOrientation">From interface orientation.</param>
         public override void DidRotate(UIInterfaceOrientation fromInterfaceOrientation)
         {
+			var frame = View.Frame;
+			var rect = UIApplication.SharedApplication.KeyWindow.Frame;
+
+			if (InterfaceOrientation == UIInterfaceOrientation.LandscapeLeft || InterfaceOrientation == UIInterfaceOrientation.LandscapeRight) {
+				frame.Size = new SizeF(rect.Width,rect.Width);
+				if (IsPanelVisible (PanelType.RightPanel) == false) {
+					try {
+						PanelContainer container = ExistingContainerForType(PanelType.RightPanel);
+						ShowPanel (container);
+					} catch (Exception e) {
+					}
+				}
+
+			} else {
+				frame.Size = new SizeF (rect.Width, rect.Height);
+			}
+
+			View.Frame = frame;
+
             base.DidRotate(fromInterfaceOrientation);
             _panelContainers.ForEach(c => c.DidRotate(fromInterfaceOrientation));
         }
