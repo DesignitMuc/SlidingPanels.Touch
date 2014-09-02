@@ -29,13 +29,22 @@ using System.Drawing;
 
 namespace SlidingPanels.Lib
 {
+	public class WillRotateEventArgs : EventArgs {
+		public UIInterfaceOrientation ToOrientation { get; set; }
+		public double Duration { get; set; }
+	}
+
+	public class DidRotateEventArgs : EventArgs {
+		public UIInterfaceOrientation FromOrientation { get; set; }
+	}
+
     /// <summary>
     ///     Sliding Panels Main View Controller
     /// </summary>
     public class SlidingPanelsNavigationViewController : UINavigationController {
 
-		public event EventHandler WillRotateEvent;
-		public event EventHandler DidRotateEvent;
+		public event EventHandler<WillRotateEventArgs> WillRotateEvent;
+		public event EventHandler<DidRotateEventArgs> DidRotateEvent;
 
         #region Constants
 
@@ -222,7 +231,10 @@ namespace SlidingPanels.Lib
 			}
 
 			if (WillRotateEvent != null) {
-				WillRotateEvent (this, EventArgs.Empty);
+				WillRotateEvent (this, new WillRotateEventArgs {
+					ToOrientation = toInterfaceOrientation,
+					Duration = duration
+				});
 			}
         }
 
@@ -260,9 +272,10 @@ namespace SlidingPanels.Lib
 			Console.WriteLine ("DidRotate: {0} => {1}; {2}", InterfaceOrientation, View.Frame.Width, View.Frame.Height);
 
 			if (DidRotateEvent != null) {
-				DidRotateEvent (this, EventArgs.Empty);
+				DidRotateEvent (this, new DidRotateEventArgs {
+					FromOrientation = fromInterfaceOrientation
+				});
 			}
-
         }
 
         #endregion
