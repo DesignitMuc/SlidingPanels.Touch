@@ -140,14 +140,16 @@ namespace SlidingPanels.Lib.PanelContainers
 
             if (InterfaceOrientation != UIInterfaceOrientation.Portrait) {
                 frame.Width = UIScreen.MainScreen.Bounds.Height;
-                frame.Height = UIScreen.MainScreen.ApplicationFrame.Width;
+                frame.Height = UIScreen.MainScreen.ApplicationFrame.Width + 20.0f;
                 frame.X = UIScreen.MainScreen.ApplicationFrame.Y;
 
-                if (UIApplication.SharedApplication.StatusBarOrientation == UIInterfaceOrientation.LandscapeLeft) {
-                    frame.Y = UIScreen.MainScreen.ApplicationFrame.X;
-                } else {
-                    frame.Y = UIScreen.MainScreen.Bounds.Width - UIScreen.MainScreen.ApplicationFrame.Width;
-                }
+				if (UIApplication.SharedApplication.StatusBarOrientation == UIInterfaceOrientation.LandscapeLeft) {
+					frame.Y = UIScreen.MainScreen.ApplicationFrame.X;
+				} else if (UIApplication.SharedApplication.StatusBarOrientation == UIInterfaceOrientation.LandscapeRight) {
+					frame.Y = UIScreen.MainScreen.Bounds.Width - UIScreen.MainScreen.ApplicationFrame.Width;
+				} else {
+					frame = UIScreen.MainScreen.Bounds;
+				}
             }
 
             View.Frame = frame;
