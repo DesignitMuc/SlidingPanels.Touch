@@ -50,13 +50,22 @@ namespace SlidingPanels.Lib.PanelContainers
 		{
 			get
 			{
-				return new RectangleF 
+				var rect2 = UIApplication.SharedApplication.KeyWindow.Frame;
+				var width = (InterfaceOrientation == UIInterfaceOrientation.LandscapeLeft || InterfaceOrientation == UIInterfaceOrientation.LandscapeRight) ? Math.Max (rect2.Height, rect2.Width) : Math.Min (rect2.Height, rect2.Width);
+				var height = (InterfaceOrientation == UIInterfaceOrientation.LandscapeLeft || InterfaceOrientation == UIInterfaceOrientation.LandscapeRight) ? Math.Min (rect2.Height, rect2.Width) : Math.Max (rect2.Height, rect2.Width);
+
+				View.Bounds = new RectangleF (0, 0, width, height);
+				View.Frame = View.Bounds;
+				
+				var rect = new RectangleF 
 				{
-					X = View.Bounds.Width - Size.Width,
-					Y = -View.Frame.Y,
+					X = width - Size.Width,
+					Y = 0,
 					Width = Size.Width,
-					Height = View.Bounds.Height
+					Height = height
 				};
+
+				return rect;
 			}
 		}
 
@@ -68,8 +77,8 @@ namespace SlidingPanels.Lib.PanelContainers
 		/// Initializes a new instance of the <see cref="SlidingPanels.Lib.PanelContainers.RightPanelContainer"/> class.
 		/// </summary>
 		/// <param name="panel">Panel.</param>
-		public RightPanelContainer (UIViewController panel) : base(panel, PanelType.RightPanel)
-		{
+		public RightPanelContainer (UIViewController panel) : base(panel, PanelType.RightPanel) {
+			View.UserInteractionEnabled = true;
 		}
 
 		#endregion
@@ -93,6 +102,22 @@ namespace SlidingPanels.Lib.PanelContainers
 		{
 			base.ViewWillAppear (animated);
 			PanelVC.View.Frame = PanelPosition;
+		}
+
+		void traverseToRoot(UIView view) {
+			Console.WriteLine ("UserInteraction enabled: {0}", view.UserInteractionEnabled);
+			if (view.Superview != null) {
+				traverseToRoot (view.Superview);
+			}
+		}
+
+
+		public override void ViewDidAppear (bool animated)
+		{
+			base.ViewWillAppear (animated);
+			PanelVC.View.Frame = PanelPosition;
+
+			traverseToRoot (View);
 		}
 
 		#endregion
@@ -217,6 +242,11 @@ namespace SlidingPanels.Lib.PanelContainers
 			var o = UIDevice.CurrentDevice.Orientation;
 
 			base.DidRotate (fromInterfaceOrientation);
+		}
+
+
+		public override void TouchesBegan (MonoTouch.Foundation.NSSet touches, UIEvent evt) {
+			Console.WriteLine ("Rightpaneltouch");
 		}
 	}
 }

@@ -43,9 +43,6 @@ namespace SlidingPanels.Lib
     /// </summary>
     public class SlidingPanelsNavigationViewController : UINavigationController {
 
-		public event EventHandler<WillRotateEventArgs> WillRotateEvent;
-		public event EventHandler<DidRotateEventArgs> DidRotateEvent;
-
         #region Constants
 
         /// <summary>
@@ -124,6 +121,7 @@ namespace SlidingPanels.Lib
 
 			ShadowColor = UIColor.Black.CGColor;
 			ShadowOpacity = .75f;
+			View.BackgroundColor = UIColor.Clear;
 
         }
 
@@ -214,13 +212,6 @@ namespace SlidingPanels.Lib
         {
             base.WillRotate(toInterfaceOrientation, duration);
             _panelContainers.ForEach(c => c.WillRotate(toInterfaceOrientation, duration));
-
-			if (WillRotateEvent != null) {
-				WillRotateEvent (this, new WillRotateEventArgs {
-					ToOrientation = toInterfaceOrientation,
-					Duration = duration
-				});
-			}
         }
 
         /// <summary>
@@ -232,13 +223,8 @@ namespace SlidingPanels.Lib
         {
             base.DidRotate(fromInterfaceOrientation);
             _panelContainers.ForEach(c => c.DidRotate(fromInterfaceOrientation));
-
-			if (DidRotateEvent != null) {
-				DidRotateEvent (this, new DidRotateEventArgs {
-					FromOrientation = fromInterfaceOrientation
-				});
-			}
         }
+
 
         #endregion
 
@@ -312,11 +298,15 @@ namespace SlidingPanels.Lib
 
             if (!_firstTime)
             {
+				AddChildViewController (container);
+
                 UIView parent = View.Superview;
                 View.Superview.AddSubview(container.View);
                 View.Superview.AddGestureRecognizer(_slidingGesture);
                 View.RemoveFromSuperview();
                 parent.AddSubview(View);
+				parent.UserInteractionEnabled = true;
+				container.View.UserInteractionEnabled = true;
             }
         }
 
@@ -328,6 +318,7 @@ namespace SlidingPanels.Lib
         {
             container.ViewWillAppear(true);
             container.Show();
+			container.View.UserInteractionEnabled = true;
 
             UIView.Animate(AnimationSpeed, 0, UIViewAnimationOptions.CurveEaseInOut,
                 delegate { View.Frame = container.GetTopViewPositionWhenSliderIsVisible(View.Frame); },
