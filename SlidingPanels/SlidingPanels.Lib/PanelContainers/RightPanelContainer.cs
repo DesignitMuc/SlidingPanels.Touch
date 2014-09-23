@@ -54,9 +54,7 @@ namespace SlidingPanels.Lib.PanelContainers
 				var width = (InterfaceOrientation == UIInterfaceOrientation.LandscapeLeft || InterfaceOrientation == UIInterfaceOrientation.LandscapeRight) ? Math.Max (rect2.Height, rect2.Width) : Math.Min (rect2.Height, rect2.Width);
 				var height = (InterfaceOrientation == UIInterfaceOrientation.LandscapeLeft || InterfaceOrientation == UIInterfaceOrientation.LandscapeRight) ? Math.Min (rect2.Height, rect2.Width) : Math.Max (rect2.Height, rect2.Width);
 
-				View.Bounds = new RectangleF (0, 0, width, height);
-				View.Frame = View.Bounds;
-				
+
 				var rect = new RectangleF 
 				{
 					X = width - Size.Width,
@@ -64,6 +62,9 @@ namespace SlidingPanels.Lib.PanelContainers
 					Width = Size.Width,
 					Height = height
 				};
+
+				View.Bounds = new RectangleF (rect.X, rect.Y, width, height);
+				View.Frame = View.Bounds;
 
 				return rect;
 			}
