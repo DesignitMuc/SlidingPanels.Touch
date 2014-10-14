@@ -10,7 +10,6 @@
     <OutputType>Library</OutputType>
     <RootNamespace>SlidingPanels.Lib</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>SlidingPanels.Lib</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +19,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <AssemblyName>SlidingPanels.Lib</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -27,6 +27,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <AssemblyName>SlidingPanels.Lib</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Hockey Release|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Hockey Release</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <AssemblyName>SlidingPanelsTouch</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
